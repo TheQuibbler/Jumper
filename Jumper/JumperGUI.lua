@@ -13,7 +13,9 @@ local JumperGUIFrame
 local ScrollContainer
 local ScrollStatus = { scrollvalue = 0, offset = 0 }
 local PlayerName, PlayerRealm = UnitName("player"), GetRealmName()
+local PlayerClass = select(2, UnitClass("player"))
 local SelectedChannel = "SAY"
+local ShowClassColors = true
 
 local function FormatCount(n)
 	if BreakUpLargeNumbers then
@@ -69,16 +71,32 @@ local function CollectJumpData()
 	local data = {}
 	JumperDB = JumperDB or {}
 	JumperDB[PlayerRealm] = JumperDB[PlayerRealm] or {}
-	JumperDB[PlayerRealm][PlayerName] = JumperDB[PlayerRealm][PlayerName] or 0
+	local playerEntry = JumperDB[PlayerRealm][PlayerName]
+	if type(playerEntry) == "number" then
+		JumperDB[PlayerRealm][PlayerName] = { count = playerEntry, class = PlayerClass }
+	elseif type(playerEntry) ~= "table" then
+		JumperDB[PlayerRealm][PlayerName] = { count = 0, class = PlayerClass }
+	else
+		playerEntry.count = playerEntry.count or 0
+		playerEntry.class = playerEntry.class or PlayerClass
+	end
 
 	local total = 0
 
 	for realmName, chars in pairs(JumperDB) do
 		if type(chars) == "table" then
-			for charName, count in pairs(chars) do
-				count = count or 0
+			for charName, value in pairs(chars) do
+				local count = 0
+				local classToken
+				if type(value) == "table" then
+					count = value.count or 0
+					classToken = value.class
+				else
+					count = value or 0
+				end
+
 				total = total + count
-				table.insert(data, { realm = realmName, name = charName, count = count })
+				table.insert(data, { realm = realmName, name = charName, count = count, class = classToken })
 			end
 		end
 	end
@@ -107,8 +125,13 @@ local function CreateRow(entry, isTotal)
 	row:SetAutoAdjustHeight(true) -- allow wrapping rows to grow so buttons stay visible
 
 	local nameLabel = AceGUI:Create("Label")
-	nameLabel:SetText(string.format("%s - %s", entry.name, entry.realm))
-	nameLabel:SetWidth(190)
+	local labelText = string.format("%s - %s", entry.name, entry.realm)
+	if not isTotal and ShowClassColors and entry.class and RAID_CLASS_COLORS and RAID_CLASS_COLORS[entry.class] then
+		local c = RAID_CLASS_COLORS[entry.class]
+		labelText = string.format("|c%s%s|r - %s", c.colorStr or string.format("ff%02x%02x%02x", c.r * 255, c.g * 255, c.b * 255), entry.name, entry.realm)
+	end
+	nameLabel:SetText(labelText)
+	nameLabel:SetWidth(200)
 	row:AddChild(nameLabel)
 
 	local countLabel = AceGUI:Create("Label")
@@ -216,6 +239,23 @@ local function EnsureGUI()
 		SelectedChannel = key or "SAY"
 	end)
 	channelGroup:AddChild(dropdown)
+
+	local spacer = AceGUI:Create("Label")
+	spacer:SetText(" ")
+	spacer:SetWidth(40)
+	channelGroup:AddChild(spacer)
+
+	local colorToggle = AceGUI:Create("CheckBox")
+	colorToggle:SetLabel("Show class colors")
+	colorToggle:SetValue(ShowClassColors)
+	colorToggle:SetWidth(180)
+	colorToggle:SetCallback("OnValueChanged", function(_, _, val)
+		ShowClassColors = not not val
+		if JumperGUIFrame and JumperGUIFrame.RefreshList then
+			JumperGUIFrame:RefreshList()
+		end
+	end)
+	channelGroup:AddChild(colorToggle)
 
 	frame:AddChild(channelGroup)
 
