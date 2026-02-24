@@ -1,0 +1,9 @@
+## Title: Jumper
+## Author: TheQuibbler
+## Notes: Simple Jump Counter
+## Interface: 120001
+## Version: 1.0.2
+## SavedVariables: JumperDB
+
+Jumper.lua
+JumperGUI.lua
