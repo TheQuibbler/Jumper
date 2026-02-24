@@ -228,13 +228,13 @@ local function EnsureGUI()
 	local channelLabel = AceGUI:Create("Label")
 	channelLabel:SetText("Print channel:")
 	channelLabel:SetFontObject(GameFontHighlight)
-	channelLabel:SetWidth(120)
+	channelLabel:SetWidth(130)
 	channelGroup:AddChild(channelLabel)
 
 	local dropdown = AceGUI:Create("Dropdown")
 	dropdown:SetList(CHANNELS)
 	dropdown:SetValue(SelectedChannel)
-	dropdown:SetWidth(220)
+	dropdown:SetWidth(140)
 	dropdown:SetCallback("OnValueChanged", function(_, _, key)
 		SelectedChannel = key or "SAY"
 	end)
@@ -242,13 +242,13 @@ local function EnsureGUI()
 
 	local spacer = AceGUI:Create("Label")
 	spacer:SetText(" ")
-	spacer:SetWidth(40)
+	spacer:SetWidth(45)
 	channelGroup:AddChild(spacer)
 
 	local colorToggle = AceGUI:Create("CheckBox")
 	colorToggle:SetLabel("Show class colors")
 	colorToggle:SetValue(ShowClassColors)
-	colorToggle:SetWidth(180)
+	colorToggle:SetWidth(160)
 	colorToggle:SetCallback("OnValueChanged", function(_, _, val)
 		ShowClassColors = not not val
 		if JumperGUIFrame and JumperGUIFrame.RefreshList then
