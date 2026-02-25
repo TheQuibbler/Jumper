@@ -1,10 +1,6 @@
--- Jumper.lua
--- Simple per-character jump counter
--- Stores counts in the SavedVariable `JumperDB` keyed by realm and character name.
+local _, Addon = ...
+local FormatCount = Addon.Utilities.FormatCount
 
---------------------------------------
--- Locals / Utilities
---------------------------------------
 local EventFrame = CreateFrame("Frame")
 local Name, Realm = UnitName("player"), GetRealmName()
 local Class = select(2, UnitClass("player")) -- class token for coloring
@@ -59,7 +55,7 @@ SLASH_JUMPER2 = "/jumper"
 SlashCmdList["JUMPER"] = function(Input)
 	local data = JumperDB[Realm][Name]
 	local count = type(data) == "table" and (data.count or 0) or (data or 0)
-	local Message = string.format("Jumper: %s has jumped %s times!", Name, count)
+	local Message = string.format("Jumper: %s has jumped %s times!", Name, FormatCount(count))
 	Input = string.lower(Input or "")
 
 	if Input == "guild" or Input == "officer" or Input == "party" or Input == "raid" or Input == "say" or Input == "yell" then

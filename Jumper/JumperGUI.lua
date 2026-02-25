@@ -1,13 +1,9 @@
--- JumperGUI.lua
--- GUI listing jump counts with print and reset actions.
-
---------------------------------------
--- JumperGUI.lua
--- AceGUI-powered UI listing jump counts with per-entry print/reset.
-
 --------------------------------------
 -- Locals / Utilities
 --------------------------------------
+local _, Addon = ...
+local FormatCount = Addon.Utilities.FormatCount
+
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 local JumperGUIFrame
 local ScrollContainer
@@ -16,18 +12,6 @@ local PlayerName, PlayerRealm = UnitName("player"), GetRealmName()
 local PlayerClass = select(2, UnitClass("player"))
 local SelectedChannel = "SAY"
 local ShowClassColors = true
-
-local function FormatCount(n)
-	if BreakUpLargeNumbers then
-		return BreakUpLargeNumbers(n or 0)
-	end
-	local s = tostring(n or 0)
-	local k
-	repeat
-		s, k = s:gsub("^(%-?%d+)(%d%d%d)", "%1,%2")
-	until k == 0
-	return s
-end
 
 local CHANNELS = {
 	SAY = "Say",
@@ -204,10 +188,6 @@ end
 --------------------------------------
 local function EnsureGUI()
 	if JumperGUIFrame then return end
-	if not AceGUI then
-		print("Jumper: AceGUI-3.0 is missing. Please install Ace3.")
-		return
-	end
 
 	local frame = AceGUI:Create("Frame")
 	frame:SetTitle("Jumper - Jump Counts")

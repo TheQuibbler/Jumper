@@ -1,7 +1,7 @@
 # Jumper
 
 ## Overview
-Lightweight addon for World of Warcraft that implements a jump counter with persistent tracking per character and manage saved entries via a small AceGUI window.
+Lightweight addon for World of Warcraft that implements a jump counter with persistent tracking per character and a simple AceGUI window for overview and management.
 
 ## Features
 - Per-character jump counter that persists across sessions.

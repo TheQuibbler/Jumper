@@ -9,5 +9,7 @@ Libraries\LibStub\LibStub.lua
 Libraries\CallbackHandler-1.0\CallbackHandler-1.0.lua
 Libraries\AceGUI-3.0\AceGUI-3.0.lua
 
+Utilities.lua
+
 Jumper.lua
 JumperGUI.lua
