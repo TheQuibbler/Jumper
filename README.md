@@ -23,8 +23,8 @@ Lightweight addon for World of Warcraft that implements a jump counter with pers
 - Controls: channel dropdown plus a “Show class colors” checkbox (enabled by default).
 
 ## Installation
-1. Download the Jumper addon.
-2. Extract the contents into your World of Warcraft `Interface/AddOns` directory.
+1.  Copy the `Jumper` folder into your World of Warcraft `Interface/AddOns/` directory.
+2.  Reload the UI (`/reload`) or restart the client. 
 
 ## Saved Variables
 - File: `WTF/Account/<AccountName>/SavedVariables/Jumper.lua`

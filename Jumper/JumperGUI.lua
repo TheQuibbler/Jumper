@@ -3,6 +3,7 @@
 --------------------------------------
 local _, Addon = ...
 local FormatCount = Addon.Utilities.FormatCount
+Addon.GUI = Addon.GUI or {}
 
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 local JumperGUIFrame
@@ -12,6 +13,7 @@ local PlayerName, PlayerRealm = UnitName("player"), GetRealmName()
 local PlayerClass = select(2, UnitClass("player"))
 local SelectedChannel = "SAY"
 local ShowClassColors = true
+local LastDisplayedPlayerCount
 
 local CHANNELS = {
 	SAY = "Say",
@@ -98,6 +100,21 @@ local function CollectJumpData()
 	return data, total
 end
 
+local function GetCurrentPlayerCount()
+	JumperDB = JumperDB or {}
+	local realmTable = JumperDB[PlayerRealm]
+	if type(realmTable) ~= "table" then
+		return 0
+	end
+
+	local entry = realmTable[PlayerName]
+	if type(entry) == "table" then
+		return entry.count or 0
+	end
+
+	return entry or 0
+end
+
 
 --------------------------------------
 -- Row Builder (AceGUI)
@@ -180,7 +197,21 @@ local function RefreshList()
 	if savedScroll then
 		ScrollContainer:SetScroll(savedScroll)
 	end
+
+	LastDisplayedPlayerCount = GetCurrentPlayerCount()
 end
+
+local function RefreshIfVisible(force)
+	if not JumperGUIFrame or not JumperGUIFrame.frame or not JumperGUIFrame.frame:IsShown() then
+		return
+	end
+
+	if force or GetCurrentPlayerCount() ~= LastDisplayedPlayerCount then
+		RefreshList()
+	end
+end
+
+Addon.GUI.RefreshIfVisible = RefreshIfVisible
 
 
 --------------------------------------
@@ -307,9 +338,7 @@ local function ShowGUI()
 	EnsureGUI()
 	if not JumperGUIFrame then return end
 	JumperGUIFrame:Show()
-	if JumperGUIFrame.RefreshList then
-		JumperGUIFrame:RefreshList()
-	end
+	RefreshIfVisible(true)
 end
 
 SLASH_JUMPERGUI1 = "/jumpgui"

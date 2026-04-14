@@ -1,13 +1,13 @@
+## Interface: 120005
 ## Title: Jumper
 ## Author: TheQuibbler
 ## Notes: Simple Jump Counter
-## Interface: 120001
 ## Version: 1.0.0
 ## SavedVariables: JumperDB
 
 Libraries\LibStub\LibStub.lua
 Libraries\CallbackHandler-1.0\CallbackHandler-1.0.lua
-Libraries\AceGUI-3.0\AceGUI-3.0.lua
+Libraries\AceGUI-3.0\AceGUI-3.0.xml
 
 Utilities.lua
 

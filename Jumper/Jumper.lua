@@ -37,6 +37,10 @@ EventFrame:SetScript("OnEvent", function()
 			-- fallback if someone manually edited the saved variable
 			JumperDB[Realm][Name] = (data or 0) + 1
 		end
+
+		if Addon.GUI and Addon.GUI.RefreshIfVisible then
+			Addon.GUI.RefreshIfVisible()
+		end
 	end)
 end)
 
